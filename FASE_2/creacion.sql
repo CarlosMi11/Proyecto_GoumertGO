@@ -51,8 +51,8 @@ CREATE TABLE Seccion (
 CREATE TABLE Plato (
 			id int NOT NULL PRIMARY KEY,
 			nombre varchar(256) NOT NULL,
-			orden varchar(256),
-			cantidadDisponible int CHECK (cantidadDisponible > 0),
+			orden int CHECK (orden > 0),
+			cantidadDisponible int CHECK (cantidadDisponible >= 0),
 			precio FLOAT CHECK (precio > 0),
 			descripcion varchar(256) NOT NULL,
 			idSeccion int NOT NULL,
@@ -77,7 +77,7 @@ CREATE TABLE OpcionValor (
 			id int NOT NULL,
 			idOpcion int NOT NULL,
 			nombre varchar(256) NOT NULL,
-			precio_extra FLOAT CHECK (precio_extra > 0),
+			precio_extra FLOAT CHECK (precio_extra >= 0),
 			FOREIGN KEY (idOpcion) REFERENCES Opcion(id),
 			PRIMARY KEY (id, idOpcion)
 );
@@ -88,7 +88,6 @@ CREATE TABLE PlatoOpcionValor (
 			idOpcion int NOT NULL,
 			FOREIGN KEY (idPlato) REFERENCES Plato(id),
 			FOREIGN KEY (idOpcionValor, idOpcion) REFERENCES OpcionValor(id, idOpcion),
-			FOREIGN KEY (idOpcion) REFERENCES Opcion(id),
 			PRIMARY KEY (idPlato, idOpcionValor, idOpcion)
 );
 
@@ -107,7 +106,7 @@ CREATE TABLE Cliente (
 CREATE TABLE ClienteConClienteReferido (
 			idCliente int NOT NULL,
 			idClienteReferido int NOT NULL,
-			fecha_referido DATE
+			fecha_referido DATE,
 			FOREIGN KEY (idCliente) REFERENCES Cliente(id),
 			FOREIGN KEY (idClienteReferido) REFERENCES Cliente(id),
 			PRIMARY KEY (idCliente, idClienteReferido, fecha_referido)
@@ -149,7 +148,7 @@ CREATE TABLE ClienteRepartidor (
 			idRepartidor int NOT NULL,
 			fecha DATE,
 			puntaje int CHECK (puntaje > 0 AND puntaje <= 5 ),
-			comentario varchar(256)
+			comentario varchar(256),
 			FOREIGN KEY (idCliente) REFERENCES Cliente(id),
 			FOREIGN KEY (idRepartidor) REFERENCES Repartidor(id),
 			PRIMARY KEY (idCliente, idRepartidor, fecha)
@@ -210,7 +209,6 @@ CREATE TABLE PedidoDetalleOpcionValor (
 			idOpcion int NOT NULL,
 			FOREIGN KEY (idPedidoDetalle) REFERENCES PedidoDetalle(id),
 			FOREIGN KEY (idOpcionValor, idOpcion) REFERENCES OpcionValor(id, idOpcion),
-			FOREIGN KEY (idOpcion) REFERENCES Opcion(id),
 			PRIMARY KEY (idPedidoDetalle, idOpcionValor, idOpcion)
 );
 
