@@ -23,6 +23,11 @@ PedidoDetalle
 PedidoDetalleOpcionValor
 EstadoPedido
 PedidoEstadoPedido*/
+
+-- ELIMINE LAS INSERCIONES DE CLIENTECONCLIENTEREFERIDO YA QUE EL TRIGGER DEBERIA HACERLO AUTOMATICAMENTE
+-- TAMBIEN ELIMINE EL 30% DE LOS CLIENTES PARA QUE SE AGREGUEN CON EL OTRO SCRIPT DESPUES DEL TRIGGER
+-- ELIMINE TAMBIEN ALGUNOS PEDIDOS PARA ACTIVARLOS CON EL TRIGGER CREO NO SE NO ME ACUERDO UN SALUDO, ANDREA.
+
 INSERT INTO Comercio(id, [password], telefono, fecha_registro, correo, nombre, ubicacion_fisica,hora_apertura, hora_cierre, estaActivo)
 VALUES
 (1, 'italia123', '212-555-2001', '2018-05-15', 'bellaitalia@email.com', 'Trattoria Bella Italia', 'Av. Principal de La Castellana, Caracas', 12, 23, 1),
@@ -1043,71 +1048,7 @@ VALUES
 (67, 'claveSegura67', '555-1067', '2020-04-17', 'cliente67@email.com', 'Ester', 'Hidalgo', '1997-06-23', 10000067),
 (68, 'claveSegura68', '555-1068', '2020-04-18', 'cliente68@email.com', 'Marcos', 'Palacios', '1982-10-06', 10000068),
 (69, 'claveSegura69', '555-1069', '2020-04-19', 'cliente69@email.com', 'Julia', 'Santos', '1979-01-19', 10000069),
-(70, 'claveSegura70', '555-1070', '2020-04-20', 'cliente70@email.com', 'Manuel', 'Lago', '1995-05-02', 10000070),
-(71, 'claveSegura71', '555-1071', '2020-05-01', 'cliente71@email.com', 'Sara', 'Robles', '1988-09-15', 10000071),
-(72, 'claveSegura72', '555-1072', '2020-05-02', 'cliente72@email.com', 'Roberto', 'Mora', '1977-03-28', 10000072),
-(73, 'claveSegura73', '555-1073', '2020-05-03', 'cliente73@email.com', 'Tania', 'Valero', '1993-07-11', 10000073),
-(74, 'claveSegura74', '555-1074', '2020-05-04', 'cliente74@email.com', 'Andrés', 'Crespo', '1980-11-24', 10000074),
-(75, 'claveSegura75', '555-1075', '2020-05-05', 'cliente75@email.com', 'Mónica', 'Franco', '1996-04-07', 10000075),
-(76, 'claveSegura76', '555-1076', '2020-05-06', 'cliente76@email.com', 'Hugo', 'Bernal', '1983-08-20', 10000076),
-(77, 'claveSegura77', '555-1077', '2020-05-07', 'cliente77@email.com', 'Nerea', 'Rey', '1979-12-03', 10000077),
-(78, 'claveSegura78', '555-1078', '2020-05-08', 'cliente78@email.com', 'Jaime', 'Arias', '1994-02-16', 10000078),
-(79, 'claveSegura79', '555-1079', '2020-05-09', 'cliente79@email.com', 'Celia', 'Paz', '1987-06-29', 10000079),
-(80, 'claveSegura80', '555-1080', '2020-05-10', 'cliente80@email.com', 'Diego', 'Carmona', '1975-10-12', 10000080),
-(81, 'claveSegura81', '555-1081', '2020-05-11', 'cliente81@email.com', 'Luis', 'Molina', '1990-03-25', 10000081),
-(82, 'claveSegura82', '555-1082', '2020-05-12', 'cliente82@email.com', 'Marta', 'Castaño', '1985-07-08', 10000082),
-(83, 'claveSegura83', '555-1083', '2020-05-13', 'cliente83@email.com', 'Joaquín', 'Salas', '1998-01-21', 10000083),
-(84, 'claveSegura84', '555-1084', '2020-05-14', 'cliente84@email.com', 'Aitana', 'Varela', '1982-04-04', 10000084),
-(85, 'claveSegura85', '555-1085', '2020-05-15', 'cliente85@email.com', 'Oliver', 'Ramos', '1976-08-17', 10000085),
-(86, 'claveSegura86', '555-1086', '2020-05-16', 'cliente86@email.com', 'Yolanda', 'Luque', '1993-12-30', 10000086),
-(87, 'claveSegura87', '555-1087', '2020-05-17', 'cliente87@email.com', 'Simón', 'Roldán', '1989-05-13', 10000087),
-(88, 'claveSegura88', '555-1088', '2020-05-18', 'cliente88@email.com', 'Nicolás', 'Quintero', '1978-09-26', 10000088),
-(89, 'claveSegura89', '555-1089', '2020-05-19', 'cliente89@email.com', 'Aroa', 'Plaza', '1995-02-08', 10000089),
-(90, 'claveSegura90', '555-1090', '2020-05-20', 'cliente90@email.com', 'Eric', 'Acosta', '1981-06-21', 10000090),
-(91, 'claveSegura91', '555-1091', '2020-06-01', 'cliente91@email.com', 'Mariano', 'Corral', '1997-10-04', 10000091),
-(92, 'claveSegura92', '555-1092', '2020-06-02', 'cliente92@email.com', 'Irene', 'Rosado', '1984-01-17', 10000092),
-(93, 'claveSegura93', '555-1093', '2020-06-03', 'cliente93@email.com', 'Salvador', 'Saiz', '1979-05-30', 10000093),
-(94, 'claveSegura94', '555-1094', '2020-06-04', 'cliente94@email.com', 'Lara', 'Perea', '1996-09-12', 10000094),
-(95, 'claveSegura95', '555-1095', '2020-06-05', 'cliente95@email.com', 'Fermín', 'Bermúdez', '1983-12-25', 10000095),
-(96, 'claveSegura96', '555-1096', '2020-06-06', 'cliente96@email.com', 'Amparo', 'Villanueva', '1977-04-08', 10000096),
-(97, 'claveSegura97', '555-1097', '2020-06-07', 'cliente97@email.com', 'Rodrigo', 'Roca', '1994-08-21', 10000097),
-(98, 'claveSegura98', '555-1098', '2020-06-08', 'cliente98@email.com', 'Esperanza', 'Galán', '1980-11-03', 10000098),
-(99, 'claveSegura99', '555-1099', '2020-06-09', 'cliente99@email.com', 'Teodoro', 'Vaquero', '1991-03-16', 10000099),
-(100, 'claveSegura100', '555-1100', '2020-06-10', 'cliente100@email.com', 'Bea', 'Belisario', '1986-07-29', 10000100);
-
-INSERT INTO ClienteConClienteReferido(idCliente,idClienteReferido,fecha_referido)
-VALUES
-(1, 2, '2020-02-15'),
-(1, 3, '2020-03-10'),
-(2, 4, '2020-04-05'),
-(3, 5, '2020-05-12'),
-(4, 6, '2020-06-20'),
-(5, 7, '2020-07-08'),
-(6, 8, '2020-08-14'),
-(7, 9, '2020-09-03'),
-(8, 10, '2020-10-22'),
-(9, 11, '2020-11-18'),
-(10, 12, '2020-12-05'),
-(11, 13, '2021-01-15'),
-(12, 14, '2021-02-10'),
-(13, 15, '2021-03-08'),
-(14, 16, '2021-04-17'),
-(15, 17, '2021-05-22'),
-(16, 18, '2021-06-30'),
-(17, 19, '2021-07-11'),
-(18, 20, '2021-08-09'),
-(19, 21, '2021-09-25'),
-(20, 22, '2021-10-14'),
-(21, 23, '2021-11-03'),
-(22, 24, '2021-12-12'),
-(23, 25, '2022-01-07'),
-(24, 26, '2022-02-18'),
-(25, 27, '2022-03-22'),
-(26, 28, '2022-04-05'),
-(27, 29, '2022-05-19'),
-(28, 30, '2022-06-28'),
-(29, 31, '2022-07-15'),
-(30, 32, '2022-08-04');
+(70, 'claveSegura70', '555-1070', '2020-04-20', 'cliente70@email.com', 'Manuel', 'Lago', '1995-05-02', 10000070);
 
 INSERT INTO Direccion(id,codigo_postal,calle,municipio,alias,nombre_edif)
 VALUES
@@ -1456,17 +1397,7 @@ VALUES
 (137, 4, 2.75, 'Raw vegan', 80, 88.40),
 (138, 3, 2.50, 'Dejar en lounge', 75, 77.80),
 (139, 2, 2.00, 'Extra especias', 65, 69.20),
-(140, 6, 3.50, 'Gala benéfica', 95, 125.60),
-(141, 1, 1.50, 'Sin sésamo', 50, 55.30),
-(142, 3, 2.50, 'Entregar en piso ejecutivo', 85, 84.70),
-(143, 4, 2.75, 'Empaque hermético', 90, 98.20),
-(144, 2, 2.00, 'Sin alérgenos', 70, 76.80),
-(145, 1, 1.50, 'Boda de oro', 55, 60.40),
-(146, 5, 3.00, 'Empaque corporativo', 90, 108.70),
-(147, 3, 2.50, 'Dejar con anfitrión', 80, 85.20),
-(148, 2, 2.00, 'Extra limón', 70, 75.60),
-(149, 4, 2.75, 'Para banquete', 95, 104.80),
-(150, 1, 1.50, 'Sin gluten', 50, 58.20);
+(140, 6, 3.50, 'Gala benéfica', 95, 125.60);
 
 INSERT INTO Factura(numero,fecha_emision,sub_total,porcentajeIva,montoIVA,monto_total,idPedido)
 VALUES
@@ -1609,17 +1540,7 @@ VALUES
 (20250137, '2025-07-15', 40.50, 16, 6.48, 46.98, 137),
 (20250138, '2025-07-20', 29.25, 16, 4.68, 33.93, 138),
 (20250139, '2025-07-25', 26.50, 16, 4.24, 30.74, 139),
-(20250140, '2025-07-30', 65.00, 16, 10.40, 75.40, 140),
-(20250141, '2025-08-05', 31.00, 16, 4.96, 35.96, 141),
-(20250142, '2025-08-10', 24.25, 16, 3.88, 28.13, 142),
-(20250143, '2025-08-15', 49.00, 16, 7.84, 56.84, 143),
-(20250144, '2025-08-20', 21.00, 16, 3.36, 24.36, 144),
-(20250145, '2025-08-25', 37.50, 16, 6.00, 43.50, 145),
-(20250146, '2025-09-01', 28.25, 16, 4.52, 32.77, 146),
-(20250147, '2025-09-05', 35.75, 16, 5.72, 41.47, 147),
-(20250148, '2025-09-10', 20.25, 16, 3.24, 23.49, 148),
-(20250149, '2025-09-15', 62.50, 16, 10.00, 72.50, 149),
-(20250150, '2025-09-20', 27.25, 16, 4.36, 31.61, 150);
+(20250140, '2025-07-30', 65.00, 16, 10.40, 75.40, 140);
 
 INSERT INTO ClientePedido (idCliente, idPedido, fecha) 
 VALUES
