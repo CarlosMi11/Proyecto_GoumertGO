@@ -1,0 +1,26 @@
+USE GourmetGo;
+-- hay que ejecutarlo como 4 veces para que se vacien todas las tablas
+DELETE FROM Cliente;
+DELETE FROM ClienteConClienteReferido;
+DELETE FROM ClientePedido;
+DELETE FROM ClienteRepartidor;
+DELETE FROM Cocina;
+DELETE FROM Comercio;
+DELETE FROM ComercioCocina;
+DELETE FROM DireccionCliente;
+DELETE FROM Direccion;
+DELETE FROM EstadoPedido;
+DELETE FROM Factura;
+DELETE FROM Menu;
+DELETE FROM Opcion;
+DELETE FROM OpcionValor;
+DELETE FROM Pedido;
+DELETE FROM PedidoDetalle;
+DELETE FROM PedidoDetalleOpcionValor;
+DELETE FROM PedidoEstadoPedido;
+DELETE FROM Plato;
+DELETE FROM PlatoOpcion;
+DELETE FROM PlatoOpcionValor;
+DELETE FROM Repartidor;
+DELETE FROM RepartidorPedido;
+DELETE FROM Seccion;
