@@ -50,7 +50,7 @@ BEGIN
         END
     IF EXISTS (SELECT 1 FROM Plato WHERE cantidadDisponible < 1 AND Plato = @idPlato)
         BEGIN
-            RAISERROR('Plato no disponible', 16, 1);
+            RAISERROR('Cant. de Plato/s no disponible', 16, 1);
             ROLLBACK;
             RETURN;
         END
@@ -109,7 +109,3 @@ BEGIN
 END;
 
 --b)
-CREATE PROCEDURE SP_AsignarRepartidor
-BEGIN
-@idPedido int
-END;
