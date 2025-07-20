@@ -174,23 +174,24 @@ CREATE TABLE Factura (
 			FOREIGN KEY (idPedido) REFERENCES Pedido(id)
 );
 
-CREATE TABLE ClientePedido (
-			idCliente int NOT NULL,
+CREATE TABLE RepartidorPedido (
+			idRepartidor int NOT NULL,
 			idPedido int NOT NULL,
-			fecha DATE,
-			FOREIGN KEY (idCliente) REFERENCES Cliente(id),
+			tiempo_entrega int CHECK (tiempo_entrega > 0),
+			FOREIGN KEY (idRepartidor) REFERENCES Repartidor(id),
 			FOREIGN KEY (idPedido) REFERENCES Pedido(id),
-			PRIMARY KEY (idCliente, idPedido, fecha)
+			PRIMARY KEY (idRepartidor, idPedido)
 );
+
 
 CREATE TABLE RepartidorPedido (
 			idCliente int NOT NULL,
 			idRepartidor int NOT NULL,
 			idPedido int NOT NULL,
 			tiempo_entrega int CHECK (tiempo_entrega > 0),
-			FOREIGN KEY (idCliente) REFERENCES Cliente(id),
+			FOREIGN KEY (idRepartidor) REFERENCES Repartidor(id),
 			FOREIGN KEY (idPedido) REFERENCES Pedido(id),
-			PRIMARY KEY (idCliente, idPedido)
+			PRIMARY KEY (idRepartidor, idPedido)
 );
 
 CREATE TABLE PedidoDetalle (
