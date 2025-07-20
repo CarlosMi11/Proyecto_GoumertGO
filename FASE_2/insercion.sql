@@ -14,7 +14,6 @@ Direccion
 DireccionCliente
 ClienteRepartidor
 Repartidor
-nro_documento, detalle_vehiculo, estado)
 Factura
 Pedido
 ClientePedido
@@ -1676,26 +1675,26 @@ VALUES
 
 INSERT INTO RepartidorPedido (idRepartidor, idPedido, tiempo_entrega) 
 VALUES
-(5, 23, 32),
-(12, 145, 28),
-(88, 67, 45),
-(34, 12, 38),
-(76, 89, 25),
-(19, 134, 50),
-(42, 56, 22),
-(93, 78, 33),
-(27, 112, 41),
-(63, 45, 29),
-(8, 99, 36),
-(51, 23, 31),
-(97, 148, 27),
+(1, 23, 32),
+(2, 145, 28),
+(3, 67, 45),
+(4, 12, 38),
+(5, 89, 25),
+(6, 138, 50),
+(7, 56, 22),
+(8, 78, 33),
+(9, 112, 41),
+(10, 45, 29),
+(11, 99, 36),
+(12, 23, 31),
+(13, 148, 27),
 (14, 76, 44),
-(39, 34, 39),
-(72, 121, 23),
-(3, 58, 47),
-(45, 92, 30),
-(81, 13, 34),
-(22, 137, 42);
+(15, 34, 39),
+(16, 121, 23),
+(17, 58, 47),
+(18, 92, 30),
+(19, 13, 34),
+(20, 137, 42);
 
 INSERT INTO PedidoDetalle (id, cantidad, nota, total, idPedido, idPlato) 
 VALUES
