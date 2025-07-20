@@ -184,6 +184,7 @@ CREATE TABLE ClientePedido (
 );
 
 CREATE TABLE RepartidorPedido (
+			idCliente int NOT NULL,
 			idRepartidor int NOT NULL,
 			idPedido int NOT NULL,
 			tiempo_entrega int CHECK (tiempo_entrega > 0),

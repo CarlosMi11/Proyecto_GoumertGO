@@ -23,6 +23,10 @@ PedidoDetalle
 PedidoDetalleOpcionValor
 EstadoPedido
 PedidoEstadoPedido*/
+
+USE GourmetGo;
+
+
 INSERT INTO Comercio(id, [password], telefono, fecha_registro, correo, nombre, ubicacion_fisica,hora_apertura, hora_cierre, estaActivo)
 VALUES
 (1, 'italia123', '212-555-2001', '2018-05-15', 'bellaitalia@email.com', 'Trattoria Bella Italia', 'Av. Principal de La Castellana, Caracas', 12, 23, 1),
