@@ -67,6 +67,51 @@ VALUES
 (99, 20),
 (100, 13);
 
+-- Inserts en cliente repartidor con ids de clientes de 71-100
+INSERT INTO ClienteRepartidor(idCliente,idRepartidor,fecha,puntaje,comentario)
+VALUES
+-- Clientes calificando a repartidores (usando IDs de repartidores 1-20)
+(71, 1, '2022-01-15', 5, 'Excelente servicio, muy puntual'),
+(72, 2, '2022-01-18', 4, 'Buen servicio pero llegó un poco tarde'),
+(73, 3, '2022-01-20', 5, 'Muy amable y cuidadoso con el pedido'),
+(74, 4, '2022-01-22', 3, 'El repartido se equivocó de dirección al principio'),
+(75, 5, '2022-01-25', 5, 'Servicio perfecto, muy profesional'),
+(76, 6, '2022-01-28', 4, 'Buen servicio en general'),
+(77, 7, '2022-02-01', 2, 'Pedido llegó frío y tarde'),
+(78, 8, '2022-02-05', 5, 'Increíblemente rápido y amable'),
+(79, 9, '2022-02-10', 4, 'Buen servicio, solo un pequeño retraso'),
+(80, 10, '2022-02-15', 5, 'El mejor repartidor que he tenido'),
+-- Relaciones adicionales para completar variedad
+(81, 11, '2022-02-18', 3, 'Servicio regular, nada especial'),
+(82, 12, '2022-02-20', 5, 'Muy profesional y cuidadoso'),
+(83, 13, '2022-02-22', 4, 'Buen trato y entrega rápida'),
+(84, 14, '2022-02-25', 1, 'Pedido llegó incompleto y muy tarde'),
+(85, 15, '2022-03-01', 5, 'Siempre puntual y con buena actitud'),
+(86, 16, '2022-03-05', 2, 'No siguió instrucciones de entrega'),
+(87, 17, '2022-03-10', 4, 'Buen servicio en general'),
+(88, 18, '2022-03-15', 3, 'Demora en la entrega pero fue amable'),
+(89, 19, '2022-03-20', 5, 'Excelente trato y muy rápido'),
+(90, 20, '2022-03-25', 4, 'Buen servicio, solo un pequeño detalle');
+
+-- Inserts de ClientePedido para los 30 clientes nuevos
+INSERT INTO ClientePedido (idCliente, idPedido, fecha) 
+VALUES
+(88, 3, '2023-07-12'),
+(91, 6, '2023-07-15'),
+(79, 10, '2023-07-19'),
+(98, 12, '2023-07-21'),
+(82, 16, '2023-07-25'),
+(74, 18, '2023-07-27'),
+(93, 21, '2023-07-30'),
+(87, 25, '2023-08-03'),
+(76, 29, '2023-08-07'),
+(95, 31, '2023-08-09'),
+(72, 35, '2023-08-13'),
+(84, 37, '2023-08-15'),
+(99, 42, '2023-08-20'),
+(77, 44, '2023-08-22'),
+(89, 47, '2023-08-25');
+
 -- Inserts para activar trigger de factura
 INSERT INTO Pedido(id,cantidad_items,costo_envio,nota,tiempo_entrega,total)
 VALUES
