@@ -30,22 +30,23 @@ BEGIN
         RETURN;
     END
 
-    SELECT numero
-    INTO #FacturasHoy
+    SELECT F.numero, RP.idRepartidor as idRepartidor
+    INTO #RepartidoresConFacturasHoy
+    FROM Factura F
+    JOIN RepartidorPedido RP on F.idPedido = RP.idPedido
+    WHERE f.fecha_emision = GETDATE()
     
-    SELECT (SELECT COUNT(*)
-            FROM Factura
-            WHERE fecha_emision = GETDATE())  AS numfacturasHoy, R.id AS idRepartidorConMenosPedidos
-    INTO #RepartidorescomMenosPedidosHoy
+    SELECT R.id as idRepartidorConMenosPedidos, COALESCE(cont.contador, 0) AS contFinal
     FROM Repartidor R
-    LEFT JOIN RepartidorPedido RP on R.id = RP.idRepartidor
-    LEFT JOIN Factura F on RP.idPedido = F.idPedido
-    WHERE estado = 'Activo'
+    LEFT JOIN (SELECT idRepartidor, COUNT(idRepartidor) AS contador
+                FROM #RepartidoresConFacturasHoy
+                GROUP BY idRepartidor) AS cont ON R.id = cont.idRepartidor
+    WHERE R.estado = 'Activo'
     GROUP BY R.id
-    ORDER BY numfacturasHoy ASC
+    ORDER BY contFinal ASC;
 
     SELECT TOP 1 @idRepartidor = idRepartidorConMenosPedidos 
-    FROM #RepartidorescomMenosPedidosHoy;
+    FROM #RepartidoresconMenosPedidosHoy;
 
     SELECT @idCliente = idCliente
     FROM ClientePedido
@@ -63,6 +64,8 @@ BEGIN
 
     INSERT INTO PedidoEstadoPedido(idPedido, idEstadoPedido, fecha_inicio)
     VALUES (@idPedido, 5, GETDATE());
+
+    DROP TABLE #RepartidoresConFacturasHoy;
 
     END TRY
     BEGIN CATCH
