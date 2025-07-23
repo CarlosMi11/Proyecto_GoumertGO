@@ -129,11 +129,11 @@ VALUES
 -- Updates de pedido estado para activar trigger de entrega
 UPDATE PedidoEstadoPedido
 SET idEstadoPedido = 6
-WHERE id = 11
+WHERE idEstadoPedido = 11
 
 UPDATE PedidoEstadoPedido
 SET idEstadoPedido = 6
-WHERE id = 13
+WHERE idEstadoPedido = 13
 
 -- Delete para trigger de devoluciones
 DELETE FROM PedidoDetalle WHERE id = 47;
