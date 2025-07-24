@@ -1530,7 +1530,6 @@ VALUES
 INSERT INTO RepartidorPedido (idRepartidor, idPedido, tiempo_entrega) 
 VALUES
 (1, 23, 32),
-(2, 145, 28),
 (3, 67, 45),
 (4, 12, 38),
 (5, 89, 25),
@@ -1541,7 +1540,6 @@ VALUES
 (10, 45, 29),
 (11, 99, 36),
 (12, 23, 31),
-(13, 148, 27),
 (14, 76, 44),
 (15, 34, 39),
 (16, 121, 23),
@@ -1553,7 +1551,6 @@ VALUES
 INSERT INTO PedidoDetalle (id, cantidad, nota, total, idPedido, idPlato) 
 VALUES
 (1, 2, 'Sin gluten por favor', 17.00, 23, 5),   -- Saltimbocca alla Romana
-(2, 1, 'Extra picante', 28.00, 145, 22),      -- Paella Valenciana
 (3, 3, 'Bien cocido', 57.00, 67, 35),         -- Kebab Mixto
 (4, 1, 'Sin cebolla', 15.50, 12, 3),          -- Spaghetti Carbonara
 (5, 2, 'Para llevar', 36.00, 89, 47),         -- Pizza Margherita
@@ -1564,7 +1561,6 @@ VALUES
 (10, 1, 'Fresco por favor', 18.00, 45, 7),    -- Sashimi de Salmón
 (11, 2, 'Con papas fritas', 33.00, 99, 32),   -- Lomo Saltado
 (12, 1, 'Con helado de vainilla', 8.50, 23, 58), -- Tarta de Manzana
-(13, 2, 'Piel extra crujiente', 52.00, 148, 63), -- Pato Laqueado
 (14, 1, 'Sin piña', 13.50, 76, 18),           -- Cerdo Agridulce
 (15, 2, 'Con totopos extra', 16.00, 34, 12),  -- Guacamole Tradicional
 (16, 1, 'Con pimentón aparte', 22.00, 121, 96), -- Pulpo a la Gallega
@@ -1578,7 +1574,6 @@ VALUES
 (24, 1, 'Con canela', 7.00, 97, 25),          -- Crema Catalana
 (25, 2, 'Con repollo extra', 30.00, 126, 104), -- Tacos de Pescado
 (26, 1, 'Sin jamón', 16.00, 71, 93),          -- Milanesa Napolitana
-(27, 1, 'Poco chocolate', 16.00, 142, 83),    -- Mole Poblano
 (28, 2, 'Caldo extra', 34.00, 29, 94),        -- Ramen Tonkotsu
 (29, 1, 'Con arroz basmati', 14.50, 61, 115), -- Korma Vegetariano
 (30, 1, 'Con vegetales al vapor', 20.00, 87, 78), -- Salmón Teriyaki
@@ -1592,7 +1587,6 @@ VALUES
 (38, 1, 'Sin azúcar', 8.00, 103, 65),         -- Tarta de Santiago
 (39, 1, 'Con pan fresco', 10.50, 117, 118),   -- Fattoush
 (40, 2, 'Con salsa tártara', 19.00, 131, 119), -- Empanadas Arabes
-(41, 1, 'Con frutillas', 9.00, 144, 120),     -- Dulce de Leche Pancakes
 (42, 3, 'Con chocolate caliente', 21.00, 15, 62), -- Churros con Chocolate
 (43, 1, 'Corriente por favor', 9.00, 28, 80), -- Chocolate Fondant
 (44, 1, 'Con canela molida', 8.50, 91, 110),  -- Cannoli Siciliano
@@ -1718,6 +1712,4 @@ VALUES
 (127, 2, '2023-11-13'), (128, 3, '2023-11-14'), (129, 4, '2023-11-15'), (130, 6, '2023-11-16'),
 (131, 6, '2023-11-17'), (132, 7, '2023-11-18'), (133, 6, '2023-11-19'), (134, 6, '2023-11-20'),
 (135, 5, '2023-11-21'), (136, 6, '2023-11-22'), (137, 6, '2023-11-23'), (138, 6, '2023-11-24'),
-(139, 2, '2023-11-25'), (140, 3, '2023-11-26'), (141, 4, '2023-11-27'), (142, 6, '2023-11-28'),
-(143, 6, '2023-11-29'), (144, 7, '2023-11-30'), (145, 6, '2023-12-01'), (146, 6, '2023-12-02'),
-(147, 5, '2023-12-03'), (148, 6, '2023-12-04'), (149, 6, '2023-12-05'), (150, 6, '2023-12-06');
+(139, 2, '2023-11-25'), (140, 3, '2023-11-26'), (141, 4, '2023-11-27'), (142, 6, '2023-11-28');
