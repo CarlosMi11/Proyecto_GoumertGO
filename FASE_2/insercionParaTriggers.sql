@@ -66,7 +66,6 @@ VALUES
 (98, 19),
 (99, 20),
 (100, 13);
-
 -- Inserts en cliente repartidor con ids de clientes de 71-100
 INSERT INTO ClienteRepartidor(idCliente,idRepartidor,fecha,puntaje,comentario)
 VALUES
@@ -126,6 +125,26 @@ VALUES
 (149, 4, 2.75, 'Para banquete', 95, 104.80),
 (150, 1, 1.50, 'Sin gluten', 50, 58.20);
 
+-- Inserts para pedidos nuevos
+INSERT INTO RepartidorPedido (idRepartidor, idPedido, tiempo_entrega) 
+VALUES
+(2, 145, 28),
+(13, 148, 27);
+
+-- Inserts de pedidoDetalle con pedidos nuevos
+INSERT INTO PedidoDetalle (id, cantidad, nota, total, idPedido, idPlato) 
+VALUES
+(2, 1, 'Extra picante', 28.00, 145, 22),      -- Paella Valenciana
+(13, 2, 'Piel extra crujiente', 52.00, 148, 63), -- Pato Laqueado
+(27, 1, 'Poco chocolate', 16.00, 142, 83),    -- Mole Poblano
+(41, 1, 'Con frutillas', 9.00, 144, 120);     -- Dulce de Leche Pancakes
+
+-- Inserts de pedidos nuevos
+INSERT INTO PedidoEstadoPedido (idPedido, idEstadoPedido, fecha_inicio)
+VALUES
+(143, 6, '2023-11-29'), (144, 7, '2023-11-30'), (145, 6, '2023-12-01'), (146, 6, '2023-12-02'),
+(147, 5, '2023-12-03'), (148, 6, '2023-12-04'), (149, 6, '2023-12-05'), (150, 6, '2023-12-06');  
+  
 -- Updates de pedido estado para activar trigger de entrega
 UPDATE PedidoEstadoPedido
 SET idEstadoPedido = 6
