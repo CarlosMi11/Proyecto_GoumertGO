@@ -167,7 +167,7 @@ CREATE TABLE ClientePedido (
 			idCliente INT NOT NULL,
 			idPedido INT NOT NULL,
 			fecha DATETIME NOT NULL,
-			PRIMARY KEY (idCliente, idPedido),
+			PRIMARY KEY (idCliente, idPedido, fecha),
 			FOREIGN KEY (idCliente) REFERENCES Cliente(id),
 			FOREIGN KEY (idPedido) REFERENCES Pedido(id)
 );
