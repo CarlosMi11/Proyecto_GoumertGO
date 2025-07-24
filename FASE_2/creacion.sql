@@ -183,17 +183,6 @@ CREATE TABLE RepartidorPedido (
 			PRIMARY KEY (idRepartidor, idPedido)
 );
 
-
-CREATE TABLE RepartidorPedido (
-			idCliente int NOT NULL,
-			idRepartidor int NOT NULL,
-			idPedido int NOT NULL,
-			tiempo_entrega int CHECK (tiempo_entrega > 0),
-			FOREIGN KEY (idRepartidor) REFERENCES Repartidor(id),
-			FOREIGN KEY (idPedido) REFERENCES Pedido(id),
-			PRIMARY KEY (idRepartidor, idPedido)
-);
-
 CREATE TABLE PedidoDetalle (
 			id int NOT NULL PRIMARY KEY,
 			cantidad int CHECK (cantidad > 0),
