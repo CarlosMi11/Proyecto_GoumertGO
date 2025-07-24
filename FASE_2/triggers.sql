@@ -18,7 +18,7 @@ BEGIN
     DECLARE @idPedido INT;
     DECLARE @costo_envio FLOAT;
     
-    -- Obtener el ID del pedido insertado y su costo de envío
+    -- Obtener el ID del pedido insertado y su costo de envï¿½o
     SELECT @idPedido = id, @costo_envio = costo_envio FROM inserted;
     
     -- Calcular el subtotal sumando:
@@ -32,14 +32,14 @@ BEGIN
     FROM PedidoDetalle PD
     WHERE PD.idPedido = @idPedido;
     
-    -- Costo de envío + sub_total
+    -- Costo de envï¿½o + sub_total
     SET @sub_total = @sub_total + @costo_envio;
     
     -- Monto IVA
     SET @montoIVA = @sub_total * @porcentajeIva;
     SET @monto_total = @sub_total + @montoIVA;
     
-    -- Obtener el próximo número de factura
+    -- Obtener el prï¿½ximo nï¿½mero de factura
     SELECT @numero_factura = ISNULL(MAX(numero), 0) + 1 FROM Factura;
     
     -- Insertar la nueva factura
@@ -61,7 +61,7 @@ BEGIN
     DECLARE @TotalClientes INT = (SELECT COUNT(*) FROM Cliente);
     DECLARE @ClientesBase INT = @TotalClientes * 0.7; -- Los primeros 70%
     
-    -- Solo para nuevos clientes después del 70% inicial
+    -- Solo para nuevos clientes despuï¿½s del 70% inicial
     IF @TotalClientes > @ClientesBase
     BEGIN
         -- Asignar referidor aleatorio de los clientes base (70% inicial)
@@ -69,7 +69,7 @@ BEGIN
         SELECT 
             (SELECT TOP 1 id FROM Cliente 
              WHERE id <= @ClientesBase  -- Solo de los primeros 70%
-             ORDER BY NEWID()),         -- Selección aleatoria
+             ORDER BY NEWID()),         -- Selecciï¿½n aleatoria
             i.id,                       -- ID del nuevo cliente
             GETDATE()                   -- Fecha actual
         FROM inserted i
@@ -89,7 +89,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
-    -- Verificar si algún pedido cambió a estado "Entregado"
+    -- Verificar si algï¿½n pedido cambiï¿½ a estado "Entregado"
     IF EXISTS (
         SELECT 1 
         FROM inserted i
@@ -97,14 +97,14 @@ BEGIN
         WHERE ep.nombre = 'Entregado'
     )
     BEGIN
-        -- Insertar valoraciones automáticas para pedidos entregados
+        -- Insertar valoraciones automï¿½ticas para pedidos entregados
         INSERT INTO ClienteRepartidor (idCliente, idRepartidor, fecha,
             puntaje, comentario)
         SELECT 
             p.idCliente,
             rp.idRepartidor,
             GETDATE(),
-            -- Cálculo del puntaje basado en diferencia de tiempos
+            -- Cï¿½lculo del puntaje basado en diferencia de tiempos
             CASE 
                 WHEN porcentaje_error <= 10 THEN 5  -- Excelente
                 WHEN porcentaje_error <= 20 THEN 4   -- Bueno
@@ -116,8 +116,8 @@ BEGIN
                 WHEN porcentaje_error <= 10 THEN 'Entrega excelente'
                 WHEN porcentaje_error <= 20 THEN 'Buen servicio'
                 WHEN porcentaje_error <= 30 THEN 'Entrega regular'
-                WHEN porcentaje_error <= 50 THEN 'Tardó más de lo esperado'
-                ELSE 'Entrega muy tardía'
+                WHEN porcentaje_error <= 50 THEN 'Tardï¿½ mï¿½s de lo esperado'
+                ELSE 'Entrega muy tardï¿½a'
             END
         FROM (
             -- Calcular el porcentaje de error para cada pedido entregado
@@ -125,7 +125,7 @@ BEGIN
                 i.idPedido,
                 rp.idRepartidor,
                 p.idCliente,
-                -- Fórmula: ((|Valor real - valor estimado|)/valor real) * 100
+                -- Fï¿½rmula: ((|Valor real - valor estimado|)/valor real) * 100
                 ABS(DATEDIFF(MINUTE, pep.fecha_inicio, i.fecha_inicio) - ep.tiempo_promedio) / 
                 NULLIF(DATEDIFF(MINUTE, pep.fecha_inicio, i.fecha_inicio), 0) * 100 AS porcentaje_error
             FROM 
@@ -140,7 +140,7 @@ BEGIN
                 Pedido p ON i.idPedido = p.id
             WHERE 
                 ep.nombre = 'Entregado'
-                -- Obtener el estado anterior para calcular duración real
+                -- Obtener el estado anterior para calcular duraciï¿½n real
                 AND pep.idEstadoPedido <> i.idEstadoPedido
                 AND pep.fecha_inicio = (
                     SELECT MAX(fecha_inicio) 
@@ -150,7 +150,7 @@ BEGIN
                 )
         ) AS calculos
         WHERE 
-            -- Solo si el cliente no ha valorado aún a este repartidor por este pedido
+            -- Solo si el cliente no ha valorado aï¿½n a este repartidor por este pedido
             NOT EXISTS (
                 SELECT 1 
                 FROM ClienteRepartidor cr 
@@ -176,7 +176,7 @@ BEGIN
     FROM Plato p
     INNER JOIN deleted d ON p.id = d.idPlato;
     
-    -- Actualizar el total del pedido (restando el valor de los ítems devueltos)
+    -- Actualizar el total del pedido (restando el valor de los ï¿½tems devueltos)
     UPDATE pe
     SET pe.total = pe.total - d.total,
         pe.cantidad_items = pe.cantidad_items - d.cantidad
@@ -194,7 +194,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
-    -- Registrar las opciones predeterminadas para cada nuevo ítem de pedido
+    -- Registrar las opciones predeterminadas para cada nuevo ï¿½tem de pedido
     INSERT INTO PedidoDetalleOpcionValor (
         idPedidoDetalle,
         idOpcionValor,
@@ -223,7 +223,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
-    -- 1. Identificar ítems insuficientes y eliminarlos del pedido
+    -- 1. Identificar ï¿½tems insuficientes y eliminarlos del pedido
     DELETE pd
     FROM PedidoDetalle pd
     JOIN inserted i ON pd.id = i.id
@@ -231,7 +231,7 @@ BEGIN
     WHERE p.cantidadDisponible < i.cantidad;
     
     -- Mensajes para productos eliminados
-    SELECT 'El producto no está disponible por los momentos' AS Mensaje
+    SELECT 'El producto no estï¿½ disponible por los momentos' AS Mensaje
     FROM inserted i
     JOIN Plato p ON i.idPlato = p.id
     WHERE p.cantidadDisponible < 1
@@ -245,7 +245,7 @@ BEGIN
     AND p.cantidadDisponible >= 1
     AND i.id IN (SELECT id FROM PedidoDetalle);
     
-    -- 2. Actualizar cantidad para los ítems válidos
+    -- 2. Actualizar cantidad para los ï¿½tems vï¿½lidos
     UPDATE p
     SET p.cantidadDisponible = p.cantidadDisponible - i.cantidad
     FROM Plato p
