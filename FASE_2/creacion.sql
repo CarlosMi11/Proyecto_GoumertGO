@@ -164,12 +164,12 @@ CREATE TABLE Pedido (
 );
 
 CREATE TABLE ClientePedido (
-    idCliente INT NOT NULL,
-    idPedido INT NOT NULL,
-    fecha DATETIME NOT NULL,
-    PRIMARY KEY (idCliente, idPedido),
-    FOREIGN KEY (idCliente) REFERENCES Cliente(idCliente),
-    FOREIGN KEY (idPedido) REFERENCES Pedido(idPedido)
+			idCliente INT NOT NULL,
+			idPedido INT NOT NULL,
+			fecha DATETIME NOT NULL,
+			PRIMARY KEY (idCliente, idPedido),
+			FOREIGN KEY (idCliente) REFERENCES Cliente(id),
+			FOREIGN KEY (idPedido) REFERENCES Pedido(id)
 );
 
 CREATE TABLE Factura (
