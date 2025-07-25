@@ -143,9 +143,7 @@ VALUES
 INSERT INTO PedidoEstadoPedido (idPedido, idEstadoPedido, fecha_inicio)
 VALUES
 (143, 6, '2023-11-29'), (144, 7, '2023-11-30'), (145, 6, '2023-12-01'), (146, 6, '2023-12-02'),
-(147, 5, '2023-12-03'), (148, 6, '2023-12-04'), (149, 6, '2023-12-05'), (150, 6, '2023-12-06');
-(139, 2, '2023-11-25'), (140, 3, '2023-11-26'), (141, 4, '2023-11-27'), (142, 6, '2023-11-28');
-  
+(147, 5, '2023-12-03'), (148, 6, '2023-12-04'), (149, 6, '2023-12-05'), (150, 6, '2023-12-06');  
 -- Updates de pedido estado para activar trigger de entrega
 UPDATE PedidoEstadoPedido
 SET idEstadoPedido = 6

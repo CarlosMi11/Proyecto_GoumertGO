@@ -1,7 +1,5 @@
-/* YO NO HE PROBADO ESTO PUEDE O NO FUNCIONAR DENME CHANCe
-LA PRIMERA VEZ QUE TERMINE CERRE SQL SERVER SIN QUERER Y SE BORRO TODO
-NECESITO UN DESCANSO AYUDA
-*/
+-- CREO QUE AUN HAY ALGUNOS ERRORES PERO YA COMPILA
+
 -- a, poblar factura
 CREATE TRIGGER poblar_factura
 ON Pedido
@@ -10,43 +8,39 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
-    DECLARE @sub_total FLOAT;
-    DECLARE @porcentajeIva FLOAT = 0.16;
-    DECLARE @montoIVA FLOAT;
-    DECLARE @monto_total FLOAT;
+    DECLARE @sub_total DECIMAL(10, 2);
+    DECLARE @porcentajeIva DECIMAL(5, 2) = 0.16;
+    DECLARE @montoIVA DECIMAL(10, 2);
+    DECLARE @monto_total DECIMAL(10, 2);
     DECLARE @numero_factura INT;
     DECLARE @idPedido INT;
-    DECLARE @costo_envio FLOAT;
+    DECLARE @costo_envio DECIMAL(10, 2);
     
-    -- Obtener el ID del pedido insertado y su costo de env�o
+    -- Obtener el ID del pedido insertado y su costo de envío
     SELECT @idPedido = id, @costo_envio = costo_envio FROM inserted;
     
-    -- Calcular el subtotal sumando:
-    SELECT @sub_total = ISNULL(SUM(
-        PD.total + 
-        ISNULL((
-            SELECT SUM(OV.valor_adicional * PDOV.cantidad)
-            FROM PedidoDetalleOpcionValor PDOV
-            JOIN OpcionValor OV ON PDOV.idOpcionValor = OV.id AND PDOV.idOpcion = OV.idOpcion
-            WHERE PDOV.idPedidoDetalle = PD.id), 0)), 0)
+    -- Calcular el subtotal sumando los totales de los detalles del pedido
+    SELECT @sub_total = ISNULL(SUM(PD.total), 0)
     FROM PedidoDetalle PD
     WHERE PD.idPedido = @idPedido;
     
-    -- Costo de env�o + sub_total
+    -- Sumar el costo de envío al subtotal (antes de calcular el IVA)
     SET @sub_total = @sub_total + @costo_envio;
     
-    -- Monto IVA
+    -- Calcular el monto del IVA (16% del subtotal)
     SET @montoIVA = @sub_total * @porcentajeIva;
+    
+    -- Calcular el monto total (subtotal + IVA)
     SET @monto_total = @sub_total + @montoIVA;
     
-    -- Obtener el pr�ximo n�mero de factura
+    -- Obtener el próximo número de factura
     SELECT @numero_factura = ISNULL(MAX(numero), 0) + 1 FROM Factura;
     
     -- Insertar la nueva factura
     INSERT INTO Factura (numero, fecha_emision, sub_total, porcentajeIva,
-    montoIVA, monto_total,idPedido) 
+        montoIVA, monto_total,idPedido) 
     VALUES (@numero_factura, GETDATE(), @sub_total, @porcentajeIva,@montoIVA,
-        @monto_total,@idPedido);
+    @monto_total,@idPedido);
 END;
 GO
 
@@ -89,7 +83,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
-    -- Verificar si alg�n pedido cambi� a estado "Entregado"
+    -- Verificar si algún pedido cambió a estado "Entregado"
     IF EXISTS (
         SELECT 1 
         FROM inserted i
@@ -97,52 +91,49 @@ BEGIN
         WHERE ep.nombre = 'Entregado'
     )
     BEGIN
-        -- Insertar valoraciones autom�ticas para pedidos entregados
-        INSERT INTO ClienteRepartidor (idCliente, idRepartidor, fecha,
-            puntaje, comentario)
+        -- Insertar valoraciones automáticas para pedidos entregados
+        INSERT INTO ClienteRepartidor (idCliente, idRepartidor, fecha, puntaje, comentario)
         SELECT 
-            p.idCliente,
-            rp.idRepartidor,
-            GETDATE(),
-            -- C�lculo del puntaje basado en diferencia de tiempos
+            calculos.idCliente,
+            calculos.idRepartidor,
+            CAST(GETDATE() AS DATE),
+            -- Cálculo del puntaje basado en diferencia de tiempos
             CASE 
-                WHEN porcentaje_error <= 10 THEN 5  -- Excelente
-                WHEN porcentaje_error <= 20 THEN 4   -- Bueno
-                WHEN porcentaje_error <= 30 THEN 3   -- Regular
-                WHEN porcentaje_error <= 50 THEN 2   -- Malo
-                ELSE 1                               -- Muy malo
+                WHEN calculos.porcentaje_error <= 10 THEN 5  -- Excelente
+                WHEN calculos.porcentaje_error <= 20 THEN 4  -- Bueno
+                WHEN calculos.porcentaje_error <= 30 THEN 3  -- Regular
+                WHEN calculos.porcentaje_error <= 50 THEN 2  -- Malo
+                ELSE 1                                       -- Muy malo
             END,
             CASE 
-                WHEN porcentaje_error <= 10 THEN 'Entrega excelente'
-                WHEN porcentaje_error <= 20 THEN 'Buen servicio'
-                WHEN porcentaje_error <= 30 THEN 'Entrega regular'
-                WHEN porcentaje_error <= 50 THEN 'Tard� m�s de lo esperado'
-                ELSE 'Entrega muy tard�a'
+                WHEN calculos.porcentaje_error <= 10 THEN 'Entrega excelente'
+                WHEN calculos.porcentaje_error <= 20 THEN 'Buen servicio'
+                WHEN calculos.porcentaje_error <= 30 THEN 'Entrega regular'
+                WHEN calculos.porcentaje_error <= 50 THEN 'Tardó más de lo esperado'
+                ELSE 'Entrega muy tardía'
             END
         FROM (
             -- Calcular el porcentaje de error para cada pedido entregado
             SELECT 
                 i.idPedido,
                 rp.idRepartidor,
-                p.idCliente,
-                -- F�rmula: ((|Valor real - valor estimado|)/valor real) * 100
-                ABS(DATEDIFF(MINUTE, pep.fecha_inicio, i.fecha_inicio) - ep.tiempo_promedio) / 
-                NULLIF(DATEDIFF(MINUTE, pep.fecha_inicio, i.fecha_inicio), 0) * 100 AS porcentaje_error
+                (SELECT TOP 1 idCliente FROM ClientePedido WHERE idPedido = i.idPedido) AS idCliente,
+                -- Fórmula: ((|Valor real - valor estimado|)/valor estimado) * 100
+                -- Usamos tiempo estimado como denominador para evitar división por cero
+                ABS(DATEDIFF(MINUTE, prev_pep.fecha_inicio, i.fecha_inicio) - ep.tiempo_promedio) * 100.0 / 
+                NULLIF(ep.tiempo_promedio, 0) AS porcentaje_error
             FROM 
                 inserted i
             JOIN 
-                EstadoPedido ep ON i.idEstadoPedido = ep.id
+                EstadoPedido ep ON i.idEstadoPedido = ep.id AND ep.nombre = 'Entregado'
             JOIN 
-                PedidoEstadoPedido pep ON i.idPedido = pep.idPedido
+                PedidoEstadoPedido prev_pep ON i.idPedido = prev_pep.idPedido
             JOIN 
                 RepartidorPedido rp ON i.idPedido = rp.idPedido
-            JOIN 
-                Pedido p ON i.idPedido = p.id
             WHERE 
-                ep.nombre = 'Entregado'
-                -- Obtener el estado anterior para calcular duraci�n real
-                AND pep.idEstadoPedido <> i.idEstadoPedido
-                AND pep.fecha_inicio = (
+                -- Obtener el estado anterior para calcular duración real
+                prev_pep.idEstadoPedido <> i.idEstadoPedido
+                AND prev_pep.fecha_inicio = (
                     SELECT MAX(fecha_inicio) 
                     FROM PedidoEstadoPedido 
                     WHERE idPedido = i.idPedido 
@@ -150,14 +141,14 @@ BEGIN
                 )
         ) AS calculos
         WHERE 
-            -- Solo si el cliente no ha valorado a�n a este repartidor por este pedido
+            -- Solo si el cliente no ha valorado aún a este repartidor hoy
             NOT EXISTS (
                 SELECT 1 
                 FROM ClienteRepartidor cr 
                 WHERE cr.idCliente = calculos.idCliente 
                 AND cr.idRepartidor = calculos.idRepartidor
-                AND cr.fecha >= DATEADD(DAY, -1, GETDATE())
-        );
+                AND cr.fecha = CAST(GETDATE() AS DATE)
+            AND calculos.idCliente IS NOT NULL);
     END
 END;
 GO
@@ -194,24 +185,38 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
-    -- Registrar las opciones predeterminadas para cada nuevo �tem de pedido
-    INSERT INTO PedidoDetalleOpcionValor (
-        idPedidoDetalle,
-        idOpcionValor,
-        idOpcion
-    )
-    SELECT 
-        i.id,
-        ov.id,
-        ov.idOpcion
-    FROM 
-        inserted i
-    JOIN 
-        PlatoOpcion po ON i.idPlato = po.idPlato
-    JOIN 
-        OpcionValor ov ON po.idOpcion = ov.idOpcion
-    WHERE 
-        ov.es_predeterminado = 1; -- Solo opciones predeterminadas
+    BEGIN TRY
+        -- Registrar las opciones asociadas a cada nuevo ítem de pedido
+        INSERT INTO PedidoDetalleOpcionValor (
+            idPedidoDetalle,
+            idOpcionValor,
+            idOpcion
+        )
+        SELECT 
+            i.id,
+            pov.idOpcionValor,
+            pov.idOpcion
+        FROM 
+            inserted i
+        JOIN 
+            PlatoOpcionValor pov ON i.idPlato = pov.idPlato
+        WHERE
+            -- Seleccionar la primera opción disponible para cada opción del plato
+            pov.idOpcionValor = (
+                SELECT TOP 1 id 
+                FROM OpcionValor 
+                WHERE idOpcion = pov.idOpcion
+                ORDER BY id
+            );
+    END TRY
+    BEGIN CATCH
+        -- Registrar el error si ocurre
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+        
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH
 END;
 GO
 
