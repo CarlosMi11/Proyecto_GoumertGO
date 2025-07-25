@@ -8,39 +8,34 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
-    DECLARE @sub_total DECIMAL(10, 2);
-    DECLARE @porcentajeIva DECIMAL(5, 2) = 0.16;
-    DECLARE @montoIVA DECIMAL(10, 2);
-    DECLARE @monto_total DECIMAL(10, 2);
     DECLARE @numero_factura INT;
     DECLARE @idPedido INT;
-    DECLARE @costo_envio DECIMAL(10, 2);
     
-    -- Obtener el ID del pedido insertado y su costo de envío
-    SELECT @idPedido = id, @costo_envio = costo_envio FROM inserted;
-    
-    -- Calcular el subtotal sumando los totales de los detalles del pedido
-    SELECT @sub_total = ISNULL(SUM(PD.total), 0)
-    FROM PedidoDetalle PD
-    WHERE PD.idPedido = @idPedido;
-    
-    -- Sumar el costo de envío al subtotal (antes de calcular el IVA)
-    SET @sub_total = @sub_total + @costo_envio;
-    
-    -- Calcular el monto del IVA (16% del subtotal)
-    SET @montoIVA = @sub_total * @porcentajeIva;
-    
-    -- Calcular el monto total (subtotal + IVA)
-    SET @monto_total = @sub_total + @montoIVA;
+    -- Obtener el ID del pedido insertado
+    SELECT @idPedido = id FROM inserted;
     
     -- Obtener el próximo número de factura
     SELECT @numero_factura = ISNULL(MAX(numero), 0) + 1 FROM Factura;
     
-    -- Insertar la nueva factura
-    INSERT INTO Factura (numero, fecha_emision, sub_total, porcentajeIva,
-        montoIVA, monto_total,idPedido) 
-    VALUES (@numero_factura, GETDATE(), @sub_total, @porcentajeIva,@montoIVA,
-    @monto_total,@idPedido);
+    -- Insertar la nueva factura usando las funciones definidas
+    INSERT INTO Factura (
+        numero, 
+        fecha_emision, 
+        sub_total, 
+        porcentajeIva,
+        montoIVA, 
+        monto_total,
+        idPedido
+    ) 
+    SELECT 
+        @numero_factura, 
+        GETDATE(), 
+        dbo.subTotal(@numero_factura),  -- Usa la función subTotal
+        0.16,                           -- Porcentaje fijo de IVA
+        dbo.montoIVA(@numero_factura),   -- Usa la función montoIVA
+        dbo.montoTotal(@numero_factura), -- Usa la función montoTotal
+        @idPedido
+    FROM inserted;
 END;
 GO
 
