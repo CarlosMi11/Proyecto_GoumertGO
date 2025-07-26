@@ -49,7 +49,7 @@ BEGIN
     FROM Pedido;
 
     INSERT INTO Pedido (id, costo_envio, nota, tiempo_entrega, total)
-    VALUES (@idPedido, @costo_envio, @nota_Pedido, @tiempo_entrega, 0);
+    VALUES (@idPedido, @costo_envio, @notaPedido, @tiempo_entrega, 0);
     
 
     IF NOT EXISTS (SELECT 1 FROM Cliente WHERE id = @idCliente)
