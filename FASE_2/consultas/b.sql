@@ -27,9 +27,6 @@ WITH PlatoConComercioID AS (
             SELECT pc.idComercio, p.nombre AS nombrePlato,
                 ROW_NUMBER() OVER (PARTITION BY pc.idComercio, p.nombre ORDER BY SUM(pd.cantidad) DESC) AS rn,
                 SUM(pd.cantidad) AS totalVendidos
-            -- FROM dbo.PedidoDetalle AS pd
-            -- JOIN PlatoConComercioID AS pc ON pd.idPlato = pc.idPlato
-            -- JOIN dbo.Plato AS p ON pd.idPlato = p.id
             FROM PlatoConComercioID AS pc
             LEFT JOIN dbo.PedidoDetalle AS pd ON pc.idPlato = pd.idPlato
             JOIN dbo.Plato AS p ON pd.idPlato = p.id
