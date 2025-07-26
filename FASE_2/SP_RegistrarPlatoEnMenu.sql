@@ -1,6 +1,5 @@
 --d)
 CREATE PROCEDURE SP_RegistrarPlatoEnMenu
-@idPlato int,
 @idMenu int,
 @idComercio int,
 @nombre varchar(256),
@@ -8,7 +7,7 @@ CREATE PROCEDURE SP_RegistrarPlatoEnMenu
 @descripcion varchar(256),
 @cantidadDisponible int,
 @orden int,
-@opcionesPersonalizables var(MAX) -- Sintaxis: "5,55,2"
+@opcionesPersonalizables varchar(MAX) -- Sintaxis: "5,55,2"
 AS
 BEGIN
     BEGIN TRY
@@ -16,6 +15,8 @@ BEGIN
     DECLARE @idPlato int;
     DECLARE @seccionValida int;
     DECLARE @cont int;
+    DECLARE @i int = 1;
+    DECLARE @idOpcion int;
     DECLARE @ids_opciones TABLE (id_op int);
 
     INSERT INTO @ids_opciones (id_op)
@@ -58,7 +59,6 @@ BEGIN
     INSERT INTO Plato(id, nombre, orden, cantidadDisponible, precio, descripcion, idSeccion)
     VALUES(@idPlato, @nombre, @orden, @cantidadDisponible, @precio, @descripcion, @seccionValida);
 
-    DECLARE @idOpcion int;
 
     WHILE @i <= (SELECT COUNT(*) FROM @ids_opciones)
     BEGIN
