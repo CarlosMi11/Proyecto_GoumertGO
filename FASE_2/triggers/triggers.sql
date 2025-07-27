@@ -28,7 +28,7 @@ BEGIN
     ) 
     SELECT 
         @numero_factura, 
-        GETDATE(), 
+        GETDATE(),
         dbo.subTotal(@numero_factura),  
         0.16,                           
         dbo.montoIVA(@numero_factura),  

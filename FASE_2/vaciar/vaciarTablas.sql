@@ -3,6 +3,7 @@ GO
 
 -- 1. Deshabilitar todas las restricciones FOREIGN KEY y CHECK en todas las tablas
 -- Esto permite que los DELETE se ejecuten sin violar la integridad referencial.
+
 EXEC sp_MSforeachtable @command1="ALTER TABLE ? NOCHECK CONSTRAINT ALL"
 GO
 

@@ -7,7 +7,7 @@ SELECT
 FROM 
     Repartidor r
 LEFT JOIN RepartidorPedido rp ON r.id = rp.idRepartidor
-LEFT JOIN ClienteRepartidor cr ON cr.idRepartidor = r.id AND cr.idCliente = rp.idCliente
+LEFT JOIN ClienteRepartidor cr ON (cr.idRepartidor = r.id)
 LEFT JOIN PedidoEstadoPedido pep ON pep.idPedido = rp.idPedido
 LEFT JOIN EstadoPedido ep ON pep.idEstadoPedido = ep.id
 WHERE 

@@ -29,7 +29,7 @@ BEGIN
         JOIN PedidoDetalle PD on Pl.id = PD.idPlato
         JOIN Factura F on PD.idPedido = F.idPedido
         WHERE C.id = @idComercio
-        Group by F.fecha_emision, Pl.id
+        Group by F.fecha_emision, Pl.id, C.id
     ), Rank AS (
         SELECT idPlato, fecha, cont, ROW_NUMBER() OVER (PARTITION BY fecha ORDER BY cont DESC, idPlato) AS ranking, idComercio
         FROM PlatosSolicitados
@@ -55,7 +55,7 @@ BEGIN
     JOIN PedidoDetalle PD on Pl.id = PD.idPlato
     JOIN Factura F on PD.idPedido = F.idPedido
     WHERE PMS.idComercio = @idComercio
-    GROUP BY F.fecha_emision
+    GROUP BY F.fecha_emision, pms.fecha
 
     SELECT 
         cantidadPedidos as 'Cantidad de Pedidos',

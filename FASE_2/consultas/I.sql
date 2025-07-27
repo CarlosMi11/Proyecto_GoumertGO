@@ -22,7 +22,7 @@ ventasPizzaPorMunicipio AS (
     SELECT municipio, SUM(cantidadVentas) AS cantidadVentas
     FROM DireccionesPedidosPizza
     GROUP BY municipio
-    ORDER BY cantidadVentas ASC
+    
 ),
 comerciosConPlatoPizza AS (
     SELECT c.id AS idComercio, c.nombre AS nombreComercio, p.id AS idPlato,
@@ -42,3 +42,4 @@ SELECT dp.municipio AS municipio,
 FROM ventasPizzaPorMunicipio AS vp
 JOIN DireccionesPedidosPizza AS dp ON dp.municipio = vp.municipio
 JOIN comerciosConPlatoPizza AS cp ON cp.idPlato = dp.idPlato
+ORDER BY cantidadVentas ASC

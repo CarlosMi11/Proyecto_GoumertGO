@@ -7,7 +7,7 @@ CREATE PROCEDURE SP_RegistrarPlatoEnMenu
 @descripcion varchar(256),
 @cantidadDisponible int,
 @orden int,
-@opcionesPersonalizables varchar(MAX) -- Sintaxis: "5,55,2"
+@opcionesPersonalizables varchar(MAX) 
 AS
 BEGIN
     BEGIN TRY
@@ -53,7 +53,7 @@ BEGIN
     JOIN Plato P on S.id = P.idSeccion
     WHERE M.id = @idMenu AND C.id = @idComercio
     GROUP BY S.id
-    ORDER BY @cont
+    ORDER BY COUNT(P.id)
 
     INSERT INTO Plato(id, nombre, orden, cantidadDisponible, precio, descripcion, idSeccion)
     VALUES(@idPlato, @nombre, @orden, @cantidadDisponible, @precio, @descripcion, @seccionValida);

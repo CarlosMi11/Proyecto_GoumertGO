@@ -16,24 +16,24 @@ WITH PlatoConComercioID AS (
     JOIN dbo.ComercioCocina AS cc ON c.id = cc.idComercio
     JOIN dbo.Cocina AS co ON cc.idCocina = co.id
     GROUP BY c.id
-), comercioConPlatoMasVendido AS (
-    SELECT distinct c.id as idComercio, p.nombrePlato AS nombrePlato
-           
-    FROM dbo.Comercio AS c
-    JOIN PlatoConComercioID AS pc ON c.id = pc.idComercio
-    LEFT JOIN (
-        SELECT * 
-        FROM (
-            SELECT pc.idComercio, p.nombre AS nombrePlato,
-                ROW_NUMBER() OVER (PARTITION BY pc.idComercio, p.nombre ORDER BY SUM(pd.cantidad) DESC) AS rn,
+), ventasDeCadaPlato AS (
+    SELECT pc.idComercio, p.nombre AS nombrePlato,
                 SUM(pd.cantidad) AS totalVendidos
             FROM PlatoConComercioID AS pc
             LEFT JOIN dbo.PedidoDetalle AS pd ON pc.idPlato = pd.idPlato
             JOIN dbo.Plato AS p ON pd.idPlato = p.id
             GROUP BY pc.idComercio, p.nombre
-        ) AS d
-        WHERE rn = 1
-    ) AS p ON c.id = p.idComercio
+), comercioConPlatoMasVendido AS (
+    SELECT d.idComercio, MAX(d.nombrePlato) as nombrePlato
+        FROM ventasDeCadaPlato AS d
+        JOIN (
+            SELECT idComercio, max(totalVendidos) as maximo
+            FROM ventasDeCadaPlato as D
+            GROUP BY idComercio
+        ) as c on d.idComercio = c.idComercio and maximo = d.totalVendidos
+        
+        GROUP BY d.idComercio
+        
 )
 
 SELECT c.nombre, ccp.nombreCocina AS CocinaPrincipal, 

@@ -20,7 +20,7 @@ WITH comercioConCocinaChina AS (
     GROUP BY ccp.idComercio
 )
 
-SELECT c.nombre AS nombreComercio, ccp.cantidadPedidos AS cantidadPedidos, ((c.hora_cierre - c.hora_apertura)*7) AS horasAtencion, ccc.nombreCocina
+SELECT c.id as idComercio, c.nombre AS nombreComercio, ccp.cantidadPedidos AS cantidadPedidos, ((c.hora_cierre - c.hora_apertura)*7) AS horasAtencion
 FROM comercioCantidadPedidos AS ccp
 JOIN comercioConCocinaChina AS ccc ON ccp.idComercio = ccc.idComercio
 JOIN dbo.Comercio AS c ON ccp.idComercio = c.id

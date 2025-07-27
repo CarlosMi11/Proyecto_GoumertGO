@@ -18,7 +18,7 @@ ClienteCantidadOpciones AS (
 
 SELECT cp.idCliente AS idCliente, (c.nombre ++ ' ' ++ c.apellido) as NombreCompleto, cp.cantidadPedidos AS cantidadPedidos, 
     case when cco.cantidadOpciones is NULL then 0 else cco.cantidadOpciones end as cantidadOpciones, 
-    case when cantidadPedidos = 0 then 0 else (case when cco.cantidadOpciones is NULL then 0 else cco.cantidadOpciones end) / cantidadPedidos end as promedioOpcionesPorPedido 
+    case when cantidadPedidos = 0 then 0 else ((case when cco.cantidadOpciones is NULL then 0 else cco.cantidadOpciones end)  / CAST(cantidadPedidos AS FLOAT)) end as promedioOpcionesPorPedido 
 from ClienteconPedido AS cp
 JOIN Cliente as c on c.id = cp.idCliente
 LEFT JOIN ClienteCantidadOpciones AS cco ON cp.idCliente = cco.idCliente

@@ -29,20 +29,15 @@ PedidosConSeccionesRequeridas AS (
 ),
 ClientesConRepartidorMoto AS (
     SELECT DISTINCT
-        rp.idCliente
+        cp.idCliente
     FROM 
         RepartidorPedido rp
     JOIN Repartidor r ON r.id = rp.idRepartidor
     JOIN Pedido p ON p.id = rp.idPedido
+    JOIN ClientePedido as cp ON p.id = cp.idPedido
     WHERE 
         r.detalle_vehiculo LIKE '%Moto%'
-        AND EXISTS (
-            SELECT 1
-            FROM ClientePedido cp
-            WHERE cp.idCliente = rp.idCliente
-              AND cp.idPedido = rp.idPedido
-              AND cp.fecha >= DATEADD(MONTH, -3, GETDATE())
-        )
+        AND cp.fecha >= DATEADD(MONTH, -3, GETDATE())
 ),
 ClientesValidos AS (
     SELECT 

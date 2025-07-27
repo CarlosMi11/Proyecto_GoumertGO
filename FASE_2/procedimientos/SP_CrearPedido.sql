@@ -8,18 +8,19 @@ CREATE PROCEDURE SP_CrearPedido
 @notaPedidoDetalle varchar(MAX),
 @notaPedido varchar(256),
 @costo_envio float,
-@tiempo_entrega int,
-@porcentajeIVA float
+@tiempo_entrega int
+
 AS
 BEGIN
 
+    BEGIN TRANSACTION
     BEGIN TRY
-    
+    DECLARE @porcentajeIVA float = 16.0
     DECLARE @idPedido int;
     DECLARE @idPedidoDetalle int;
     DECLARE @numFactura int;
-    DECLARE @total float;
-    DECLARE @cantidad_total int;
+    DECLARE @total float = 0;
+    DECLARE @cantidad_total int = 0;
     DECLARE @hora_apertura int;
     DECLARE @hora_cierre int;
     DECLARE @esta_activo int;
@@ -48,17 +49,18 @@ BEGIN
     SELECT @idPedido = ISNULL(MAX(id), 0) + 1 
     FROM Pedido;
 
-    INSERT INTO Pedido (id, costo_envio, nota, tiempo_entrega, total)
-    VALUES (@idPedido, @costo_envio, @notaPedido, @tiempo_entrega, 0);
+    
     
 
-    IF NOT EXISTS (SELECT 1 FROM Cliente WHERE id = @idCliente)
+    IF NOT EXISTS (SELECT * FROM Cliente WHERE id = @idCliente)
         BEGIN
             RAISERROR('Usuario no encontrado', 16, 1);
             ROLLBACK;
             RETURN;
         END
 
+    INSERT INTO Pedido (id, costo_envio, nota, tiempo_entrega, total)
+    VALUES (@idPedido, @costo_envio, @notaPedido, @tiempo_entrega, 1);
     
     DECLARE @i int = 1;
     DECLARE @cantidad int;
@@ -98,14 +100,14 @@ BEGIN
             RETURN;
         END
     
-        IF EXISTS (SELECT 1 FROM Plato WHERE cantidadDisponible < @cantidad AND Plato = @idPlato)
+        IF EXISTS (SELECT 1 FROM Plato WHERE cantidadDisponible < @cantidad AND id = @idPlato)
             BEGIN
                 RAISERROR('Cant. de Plato/s no disponible', 16, 1);
                 ROLLBACK;
                 RETURN;
             END
 
-        IF (@hora_apertura < DATEPART(HOUR, GETDATE()) OR @hora_cierre > DATEPART(HOUR, GETDATE()) OR @esta_activo = 0)
+        IF (@hora_apertura > DATEPART(HOUR, GETDATE()) OR @hora_cierre <= DATEPART(HOUR, GETDATE()) OR @esta_activo = 0)
             BEGIN
                 RAISERROR('Comercio no disponible', 16, 1);
                 ROLLBACK;
@@ -124,11 +126,7 @@ BEGIN
      
         INSERT INTO PedidoDetalle(id, cantidad, nota, total, idPedido, idPlato)
         VALUES (@idPedidoDetalle, @cantidad, @nota, @precio * @cantidad, @idPedido, @idPlato);
-
-        INSERT INTO PedidoDetalleOpcionValor(idPedidoDetalle, idOpcionValor, idOpcion) 
-        VALUES (@idPedidoDetalle, @idOpcionValor, @idOpcion);
-
-
+        
         UPDATE Plato
         SET cantidadDisponible = cantidadDisponible - @cantidad
         WHERE id = @idPlato;
@@ -136,6 +134,7 @@ BEGIN
         SET @i = @i + 1;
     END;
 
+    
 
     UPDATE Pedido
     SET cantidad_items = @cantidad_total, total = @total
@@ -151,7 +150,7 @@ BEGIN
     VALUES (@idCliente, @idPedido, GETDATE());
 
     INSERT INTO PedidoEstadoPedido(idPedido, idEstadoPedido, fecha_inicio)
-    VALUES (@idPedido, 12, GETDATE());
+    VALUES (@idPedido, 1, GETDATE());
 
     END TRY
 
@@ -159,6 +158,8 @@ BEGIN
         ROLLBACK;
         PRINT 'Error: ' + ERROR_MESSAGE();
     END CATCH
+
+    COMMIT;
 END;
 
 
