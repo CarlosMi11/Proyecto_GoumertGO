@@ -1,4 +1,4 @@
---b)
+
 CREATE PROCEDURE SP_AsignarRepartidor
 @idPedido int
 AS

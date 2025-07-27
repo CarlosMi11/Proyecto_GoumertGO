@@ -1,4 +1,4 @@
---d)
+
 CREATE PROCEDURE SP_RegistrarPlatoEnMenu
 @idPlato int,
 @idMenu int,
@@ -8,7 +8,7 @@ CREATE PROCEDURE SP_RegistrarPlatoEnMenu
 @descripcion varchar(256),
 @cantidadDisponible int,
 @orden int,
-@opcionesPersonalizables var(MAX) -- Sintaxis: "5,55,2"
+@opcionesPersonalizables var(MAX) 
 AS
 BEGIN
     BEGIN TRY
@@ -45,7 +45,6 @@ BEGIN
     SELECT @idPlato = ISNULL(MAX(id), 0) + 1 
     FROM Plato;
 
-    --Se elige la seccion con menos platos arbitrariamente
     SELECT TOP 1 @cont = COUNT(P.id), @seccionValida = S.id
     FROM Menu M
     JOIN Comercio C on M.idComercio = C.id
@@ -62,7 +61,7 @@ BEGIN
 
     WHILE @i <= (SELECT COUNT(*) FROM @ids_opciones)
     BEGIN
-        -- Obtener Opciones
+        
         SELECT @idOpcion = id_op FROM @ids_opciones WHERE id_op = (SELECT id_op FROM @ids_opciones ORDER BY id_op OFFSET @i-1 ROWS FETCH NEXT 1 ROWS ONLY);
 
         IF NOT EXISTS (SELECT 1 FROM Opcion WHERE id = @idOpcion)
@@ -72,7 +71,7 @@ BEGIN
             RETURN;
         END
         
-        --Insertar Plato Opcion
+       
         INSERT INTO PlatoOpcion(idPlato, idOpcion)
         VALUES(@idPlato, @idOpcion)
         

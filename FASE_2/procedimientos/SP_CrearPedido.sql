@@ -1,7 +1,7 @@
---a)
+
 CREATE PROCEDURE SP_CrearPedido
 @idCliente int,
-@platos_ids VARCHAR(MAX), -- Sintaxis: "5,55,2"
+@platos_ids VARCHAR(MAX), 
 @opciones_ids VARCHAR(MAX),
 @opciones_valor_id VARCHAR(MAX),
 @cantidades VARCHAR(MAX),
@@ -59,7 +59,7 @@ BEGIN
             RETURN;
         END
 
-     -- PedidoDetalle(id, cantidad, nota, total, idPedido, idPlato)
+    
     DECLARE @i int = 1;
     DECLARE @cantidad int;
     DECLARE @nota varchar(256);
@@ -70,7 +70,7 @@ BEGIN
     
     WHILE @i <= (SELECT COUNT(*) FROM @ids_platos)
     BEGIN
-        -- Obtener Datos
+        
         SELECT @idPlato = id_p FROM @ids_platos WHERE id_p = (SELECT id_p FROM @ids_platos ORDER BY id_p OFFSET @i-1 ROWS FETCH NEXT 1 ROWS ONLY);
         SELECT @cantidad = cantidad FROM @cantidad_plato WHERE cantidad = (SELECT cantidad FROM @cantidad_plato ORDER BY cantidad OFFSET @i-1 ROWS FETCH NEXT 1 ROWS ONLY);
         SELECT @nota = nota FROM @notas WHERE nota = (SELECT nota FROM @notas ORDER BY nota OFFSET @i-1 ROWS FETCH NEXT 1 ROWS ONLY);
@@ -115,20 +115,20 @@ BEGIN
         SELECT @idPedidoDetalle = ISNULL(MAX(id), 0) + 1 
         FROM PedidoDetalle;
         
-        -- Precio Plato
+ 
         SELECT @precio = precio FROM Plato WHERE id = @idPlato;
         
         SET @total = @total + @precio * @cantidad;
         SET @cantidad_total = @cantidad_total + @cantidad;
         
-        -- Insertar en el detalle del pedido
+     
         INSERT INTO PedidoDetalle(id, cantidad, nota, total, idPedido, idPlato)
         VALUES (@idPedidoDetalle, @cantidad, @nota, @precio * @cantidad, @idPedido, @idPlato);
 
         INSERT INTO PedidoDetalleOpcionValor(idPedidoDetalle, idOpcionValor, idOpcion) 
         VALUES (@idPedidoDetalle, @idOpcionValor, @idOpcion);
 
-        -- Actualizar cantidad de platos
+
         UPDATE Plato
         SET cantidadDisponible = cantidadDisponible - @cantidad
         WHERE id = @idPlato;
@@ -136,7 +136,7 @@ BEGIN
         SET @i = @i + 1;
     END;
 
-    --(id, cantidad_items, costo_envio, nota, tiempo_entrega, total)
+
     UPDATE Pedido
     SET cantidad_items = @cantidad_total, total = @total
     WHERE id = @idPedido;
@@ -161,4 +161,4 @@ BEGIN
     END CATCH
 END;
 
---b)
+
