@@ -793,6 +793,7 @@ VALUES
 (1, 39, '1/2 langosta', 25.00),
 (2, 39, 'Langosta entera', 45.00),
 (1, 40, '5 láminas', 15.00),
+(1, 33, 'Vegetales premium', 5.00),
 (2, 40, '10 láminas', 28.00);
 
 INSERT INTO PlatoOpcionValor(idPlato,idOpcionValor,idOpcion)
